@@ -60,11 +60,20 @@ Want to know more about how this system was designed? Check out the architectura
 
 ---
 
-## 🚀 Getting Started
+## 🌐 Live Demo
 
-1. Clone the repository and navigate into the `Backend` directory.
-2. Run `npm install` to install dependencies.
-3. Set up your `.env` file with your `MONGO_URI` and `PORT`.
-4. Start the server:
+The API is deployed and running live on Render! Check it out here:
+👉 **[https://job-scraper-66rz.onrender.com/](https://job-scraper-66rz.onrender.com/)**
+
+---
+
+## 🚀 Getting Started (Local Setup)
+
+The repository is configured for easy setup. You can run everything directly from the root folder!
+
+1. Clone the repository.
+2. Run `npm install` in the root folder (it will automatically install backend dependencies).
+3. Create a `.env` file in the `Backend` directory with your `MONGO_URI` and `PORT`.
+4. Start the server from the root folder:
    - `npm run dev` (for Nodemon watch mode)
    - `npm start` (for production mode)
