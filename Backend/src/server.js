@@ -1,12 +1,15 @@
 require("dotenv").config();
-const connectDB = require("./config/db.config");
 const app = require("./app");
-
-// Connect Database
-connectDB();
+const connectDB = require("./config/db.config");
+// const startScheduler = require("./services/scheduler"); // will be added in next step
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}).catch((err) => {
+  console.error("Failed to connect to database:", err);
+  process.exit(1);
 });

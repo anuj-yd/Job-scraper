@@ -1,4 +1,4 @@
-const validateJob = require("../utils/jobValidator.util");
+const { validateJob } = require("../utils/jobValidator.util");
 const retryWithBackoff = require("../utils/retry.util");
 const logger = require("../utils/logger.util");
 
