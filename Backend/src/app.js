@@ -16,12 +16,12 @@ app.get("/", (req, res) => {
       <head>
         <title>Job Scraper API</title>
         <style>
-          body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; padding: 2rem; max-width: 800px; margin: 0 auto; color: #333; }
-          h1 { color: #2563eb; }
-          a { color: #3b82f6; text-decoration: none; }
-          a:hover { text-decoration: underline; }
-          .endpoint { background: #f1f5f9; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
-          code { background: #e2e8f0; padding: 0.2rem 0.4rem; border-radius: 4px; font-weight: bold; }
+          body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; padding: 2rem; max-width: 800px; margin: 0 auto; color: #e2e8f0; background: #0f172a; }
+          h1 { color: #60a5fa; }
+          a { color: #93c5fd; text-decoration: none; }
+          a:hover { text-decoration: underline; color: #bfdbfe; }
+          .endpoint { background: #1e293b; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid #334155; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+          code { background: #0f172a; padding: 0.2rem 0.4rem; border-radius: 4px; font-weight: bold; border: 1px solid #334155; }
         </style>
       </head>
       <body>

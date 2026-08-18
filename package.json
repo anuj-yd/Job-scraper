@@ -1,0 +1,10 @@
+{
+  "name": "job-scraper-root",
+  "version": "1.0.0",
+  "description": "Root package to redirect deployments to Backend folder",
+  "scripts": {
+    "install": "cd Backend && npm install",
+    "start": "cd Backend && npm start",
+    "build": "cd Backend && npm install"
+  }
+}
