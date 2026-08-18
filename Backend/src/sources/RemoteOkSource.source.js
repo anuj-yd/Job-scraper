@@ -1,5 +1,5 @@
 const axios = require('axios');
-const IJobSource = require('./IJobSource');
+const IJobSource = require('./IJobSource.source');
 
 class RemoteOkSource extends IJobSource {
   async fetchListings() {

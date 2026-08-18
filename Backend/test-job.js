@@ -1,4 +1,4 @@
-const RemoteOkSource = require("./src/sources/RemoteOkSource");
+const RemoteOkSource = require("./src/sources/RemoteOkSource.source");
 
 (async () => {
   const source = new RemoteOkSource();
