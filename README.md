@@ -1,38 +1,70 @@
-# Job-scraper
+<div align="center">
+  <h1>🚀 Job Scraper Backend Service</h1>
+  <p><strong>A robust, resilient, and extensible service for aggregating job listings.</strong></p>
+</div>
 
-A robust backend service for scraping, validating, and storing job listings from various remote sources. Built with Node.js, Express, and MongoDB.
+---
 
-## Features
+## 📖 Overview
 
-- **Automated Job Fetching**: Pulls job data from external sources (e.g., RemoteOk).
-- **Data Validation**: Uses `zod` to ensure that incoming job listings are strictly formatted and valid.
-- **Resilient Fetching**: Implements an exponential backoff retry mechanism to gracefully handle rate limits and temporary network failures.
-- **Robust Logging**: Integrated `winston` for structured logging, capturing information and errors to both the console and a local `scraper.log` file.
-- **Extensible Architecture**: Code is split logically using dependency injection into Services, Repositories, Sources, and Utilities.
-- **RESTful API**: Easily trigger scrapes and view results via Express routes.
+Welcome to the **Job Scraper Backend**! This project is a Node.js/Express service designed to fetch, validate, and store job listings from various remote platforms (like RemoteOK and Arbeitnow) in a completely automated and reliable way.
 
-## API Endpoints
+---
 
-- **`GET /health`**
-  Returns `{ "status": "ok" }`. Used to verify the server is running.
-  
-- **`GET /jobs`**
-  Fetches and returns the 50 most recently scraped jobs from the database as a JSON array.
+## ✨ Key Features
 
-- **`GET /scrape/run`**
-  Manually triggers a scraper execution. It fetches listings with exponential backoff, validates them, saves them to MongoDB, and returns the result (e.g. `{ "success": true, "count": 10 }`).
+- 🔄 **Automated Scheduled Fetching**: Runs continuously in the background using `node-cron`.
+- 🛡️ **Data Validation**: Enforces strict payload schemas using `Zod` to maintain database integrity.
+- 🚦 **Resilient Fetching**: Implements an **exponential backoff** retry mechanism to gracefully handle rate limits and network drops.
+- 📝 **Robust Logging**: Uses `Winston` for structured terminal logging and persistent file logs (`scraper.log`).
+- 🧩 **Extensible Architecture**: Built with Dependency Injection. New job sources can be added by simply extending the `IJobSource` interface without touching core orchestration logic.
 
-## Tech Stack
+---
 
-- **Node.js** & **Express**
-- **MongoDB** & **Mongoose** (Database and ORM)
-- **Zod** (Schema Validation)
-- **Winston** (Logging)
-- **Dotenvx** (Environment variables)
+## 🛠️ Tech Stack
 
-## Getting Started
+| Technology | Purpose |
+| :--- | :--- |
+| **Node.js & Express** | Server & REST API framework |
+| **MongoDB & Mongoose** | Database & ODM for fast, schema-based storage |
+| **Zod** | Type-safe schema validation |
+| **Winston** | Production-grade logging |
+| **Axios** | Promise-based HTTP client for data fetching |
+
+---
+
+## 📡 API Endpoints
+
+### `GET /health`
+Sanity check endpoint to verify the server is alive.
+```json
+{ "status": "ok" }
+```
+
+### `GET /jobs`
+Fetches the 50 most recently scraped and validated jobs from the database.
+
+### `GET /scrape/run`
+Manually triggers a scraper execution. It fetches listings with exponential backoff, validates them, saves them to MongoDB, and returns a summary:
+```json
+{ "success": true, "count": 124 }
+```
+
+---
+
+## 📚 Deep Dives
+
+Want to know more about how this system was designed? Check out the architectural documents:
+- 🏗️ [**Design Document**](DESIGN.md) - Details on ingestion strategy, anti-bot mitigation, and resilience.
+- ⚖️ [**Decisions & Trade-offs**](DECISIONS.md) - Explains why the interface pattern was chosen and the trade-offs made.
+
+---
+
+## 🚀 Getting Started
 
 1. Clone the repository and navigate into the `Backend` directory.
 2. Run `npm install` to install dependencies.
 3. Set up your `.env` file with your `MONGO_URI` and `PORT`.
-4. Start the server with `npm run dev` (for Nodemon) or `npm start`.
+4. Start the server:
+   - `npm run dev` (for Nodemon watch mode)
+   - `npm start` (for production mode)
