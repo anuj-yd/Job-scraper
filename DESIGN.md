@@ -42,7 +42,7 @@ Because I built everything around the `IJobSource` interface, if my primary sour
 
 - ♻️ **Exponential Backoff:** Configured for 3 attempts with doubling delay to absorb transient network issues.
 - 🔍 **Schema Validation (Zod):** If the API markup or response format suddenly changes, invalid records are silently skipped (returning `null`). The pipeline does not crash.
-- 📭 **Empty Response Handling:** If the source returns nothing even after all retries, `ScraperService.js` logs a warning and gracefully returns `{ success: false, count: 0 }`.
+- 📭 **Empty Response Handling:** If the source returns nothing even after all retries, `ScraperService.service.js` logs a warning and gracefully returns `{ success: false, count: 0 }`.
 - 🚧 **Partial Failure Isolation:** Inside `JobRepository.saveMany`, if a single job fails to save (e.g., due to a DB constraint), the rest of the batch continues saving without interruption.
 - ⏱️ **Scheduler-Level Try/Catch:** If the entire scraper run crashes, the cron scheduler remains alive. The next scheduled run will execute normally 30 minutes later.
 
