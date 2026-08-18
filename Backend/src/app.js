@@ -35,4 +35,4 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-module.exports = app;
+module.exports = { app, scraper };
