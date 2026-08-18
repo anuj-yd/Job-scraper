@@ -1,37 +1,31 @@
 # ⚖️ Architectural Decisions & Trade-offs
 
-This document outlines the core technical choices, the reasoning behind them, and the compromises made during development.
-
 ---
 
 ## 1️⃣ Why this strategy, and what was rejected?
 
-We explicitly chose an **interface-based, pluggable source architecture** (`IJobSource` alongside concrete adapters like `RemoteOkSource` and `ArbeitnowSource`) rather than a single, hardcoded monolithic scraper script. 
+I explicitly chose an **interface-based, pluggable source architecture** (`IJobSource` alongside concrete adapters like `RemoteOkSource` and `ArbeitnowSource`) rather than writing a single, hardcoded scraper function directly for RemoteOK. 
 
-**The Rejected Alternative:** 
-The obvious alternative was writing a simple, procedural script that directly called the API, parsed the JSON, and pushed it straight to MongoDB. While faster to write initially, it represents a fragile design. 
-
-In the real world, job platforms frequently change their DOM layouts, adjust API structures, or outright block scrapers. If that happened with a hardcoded script, the entire ingestion logic would need a rewrite. By utilizing the **Interface pattern and Dependency Injection**, adding a completely new platform (like Arbeitnow) was as simple as creating a single new file. The core orchestration logic (`ScraperService`) didn't have to change at all.
+**The Rejected Alternative:**  
+The obvious alternative was a quick script that calls the API, parses the JSON, and pushes it to the DB. While that would have been faster, it's a fragile design. In the real world, job platforms block bots or change their API structures frequently. If that happened with a hardcoded script, I would have had to rewrite the entire codebase. By using the Interface pattern, adding `Arbeitnow` as a backup source was as simple as creating a single new file (`ArbeitnowSource.source.js`). None of the existing orchestration logic in `ScraperService` had to be touched.
 
 ---
 
 ## 2️⃣ Trade-offs made due to time constraints
 
-Given the limited time, we opted to use Mongoose's standard `.saveMany()` logic to iterate and insert records, relying on the database's unique constraints to prevent duplicates instead of writing complex synchronization/upsert logic.
+A major trade-off I made was **hardcoding the cron scheduler interval (30 minutes)** and the **retry logic (3 attempts, 1000ms base delay)**. 
 
-**If we had more time:**
-- **Bulk Operations:** We would implement true batch `bulkWrite` operations in MongoDB for massive performance gains on huge datasets. 
-- **Message Queues:** We would introduce a robust message broker (like RabbitMQ or Redis BullMQ) between the fetching layer and the database layer. This would allow the system to scale horizontally, fetching from dozens of sources concurrently while safely queuing the data for insertion without overwhelming database connection pools.
+I intentionally skipped implementing a dynamic/adaptive scheduling system (which would adjust intervals based on source response times or rate-limit headers) because of the limited timeframe, and because the demo sources are highly permissible public APIs.
+
+> **If I had a full week to build this:** I would extract these hardcoded values into environment variables, implement a smarter adaptive jitter system, and integrate residential proxy rotation for actual resilience against IP bans. 
 
 ---
 
 ## 3️⃣ AI Usage & Verification
 
-We utilized AI as an advanced pair-programmer to accelerate boilerplate generation (like basic Express setup, Winston logger configuration, and Mongoose schema definitions) and to rapidly brainstorm the exponential backoff mathematics in the retry utility.
+I utilized AI as a pair-programmer to generate boilerplate code (like the Mongoose schema structure, basic Express route skeletons, and the math for the exponential backoff pattern). 
 
-**Ownership and Verification:**
-Despite the AI assistance, full ownership of the architectural design was retained. 
-- The Dependency Injection pattern for the `ScraperService` was strictly enforced.
-- The `Zod` validation boundaries were explicitly mandated. 
-- When the AI generated initial implementations, the code was manually verified. 
-- Complex bugs—such as fixing a critical import issue where the Zod validator was imported as an object instead of a function—were actively debugged and resolved by hand to ensure the final pipeline was resilient and production-ready.
+However, I strictly verified and manually adapted the logic to reality:
+- 🔍 **API Field Mapping:** I did not blindly trust the AI's assumption of the source API fields. I directly inspected the RemoteOK and Arbeitnow JSON payloads in my browser to confirm the actual field names (e.g., mapping `position` vs `title`, and `company_name` vs `company`).
+- ⏱️ **Timestamp Debugging:** The AI assumed Arbeitnow's `created_at` field was a standard date string. Through manual testing, I realized it was actually a Unix timestamp in seconds, which required me to manually update the code to multiply by 1000 (`new Date(job.created_at * 1000)`) for JavaScript compatibility.
+- 🐛 **Debugging Import Issues:** When the AI incorrectly imported the Zod `validateJob` object as a function (causing a runtime crash during a manual test), I manually traced the error back to the export structure and fixed the destructuring logic in the `ScraperService`.
