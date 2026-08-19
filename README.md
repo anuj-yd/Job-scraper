@@ -62,18 +62,19 @@ Want to know more about how this system was designed? Check out the architectura
 
 ## 🌐 Live Demo
 
-The API is deployed and running live on Render! Check it out here:
-👉 **[https://job-scraper-66rz.onrender.com/](https://job-scraper-66rz.onrender.com/)**
+The API is deployed and running live on Render. There's no UI at the root path — hit these endpoints directly:
+- **Health check:** https://job-scraper-66rz.onrender.com/health
+- **Recent jobs:** https://job-scraper-66rz.onrender.com/jobs
+- **Trigger a scrape:** https://job-scraper-66rz.onrender.com/scrape/run
+
+> Note: the free Render tier sleeps after periods of inactivity, so the first request after a while may take 30–60 seconds to wake the server up.
 
 ---
 
 ## 🚀 Getting Started (Local Setup)
 
-The repository is configured for easy setup. You can run everything directly from the root folder!
+The repository is configured for easy setup. The actual server code lives inside the `Backend` folder.
 
 1. Clone the repository.
-2. Run `npm install` in the root folder (it will automatically install backend dependencies).
-3. Create a `.env` file in the `Backend` directory with your `MONGO_URI` and `PORT`.
-4. Start the server from the root folder:
-   - `npm run dev` (for Nodemon watch mode)
-   - `npm start` (for production mode)
+2. Run `npm install` in the root folder (it will automatically install backend dependencies too).
+3. Create a `.env` file inside the `Backend` directory with:
