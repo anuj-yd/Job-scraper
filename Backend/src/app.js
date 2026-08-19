@@ -64,7 +64,7 @@ app.get("/scrape/run", async (req, res) => {
 app.get("/jobs", async (req, res) => {
   try {
     const jobs = await Job.find().sort({ fetchedAt: -1 }).limit(50);
-    res.json(jobs);
+    res.json({ count: jobs.length, data: jobs });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
